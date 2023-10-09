@@ -20,22 +20,19 @@ public class Main {
 		Item cdItem = new Item(cd,1);
 		Item chocolateItem = new Item(chocolate,1);
 		//-- displaying items input
-		System.out.println("INPUT: ");
+		System.out.println("INPUT:");
 		System.out.println(bookItem);
 		System.out.println(cdItem);
-		System.out.println();
+		System.out.println(chocolateItem);
 		//-- adding each item to the purchase receipt
 		PurchaseReceipt receipt = new PurchaseReceipt();
 		receipt.addItem(bookItem);
 		receipt.addItem(cdItem);
 		receipt.addItem(chocolateItem);
-		//-- 1. Calculate total price excluding TAX
-		receipt.calculateTotalExcludingTax();
-		//-- 2. Calculate the total Sales tax and Import Tax
-		receipt.calculateTotalTAX();
+		//-- calculating the
+		receipt.init();
 //
 		//-- getting the receipt output
-		System.out.println("OUTPUT");
 		System.out.println(receipt);
 	}
 

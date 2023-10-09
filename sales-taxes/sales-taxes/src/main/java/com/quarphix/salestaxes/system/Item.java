@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,24 +27,30 @@ public class Item {
     public Item(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
+        init();
+    }
+    public void init(){
+        calculateTotalPrice();
+        calculateSalesTax();
+        calculateImportTax();
+        calculatePriceIncludingTax();
     }
     /**
      *
      * @return
      */
     public void calculateTotalPrice() {
-        this.totalPrice = this.product.getPrice() * quantity;
-        setTotalPrice(this.totalPrice);
+        double total = product.getPrice() * quantity;
+        setTotalPrice(total);
     }
     /**
      *
      * @return
      */
     public void calculateImportTax() {
-        if(product.isImport()) {
-            this.importTax = product.getPrice() * Constant.IMPORT_DUTY_TAX * quantity;
-        }
-        setImportTax(this.importTax);
+        double import_tax = product.isImport() ? product.getPrice() * quantity * Constant.IMPORT_DUTY_TAX : 0.0;
+        import_tax = new BigDecimal(import_tax).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+        setImportTax(import_tax);
     }
     /**
      *
@@ -50,22 +58,23 @@ public class Item {
      */
     public void calculateSalesTax() {
         //-- 1. Assign sales tax to a store product
-        if(!this.product.getProductType().equals(Type.BOOK) ||
-                !this.product.getProductType().equals(Type.FOOD) ||
-                !this.product.getProductType().equals(Type.MEDICATION)) {
-            this.salesTax = this.product.getPrice() * Constant.SALES_TAX * quantity;
-        }
-        setSalesTax(this.salesTax);
+        double sales_tax = this.product.getProductType().equals(Type.BOOK) ||
+                this.product.getProductType().equals(Type.FOOD) ||
+                this.product.getProductType().equals(Type.MEDICATION) ? 0.0 : product.getPrice() * quantity * Constant.SALES_TAX;
+        //-- 2. Rounding up to nearest 10
+        sales_tax = new BigDecimal(sales_tax).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+        setSalesTax(sales_tax);
     }
     /**
      *
      * @return
      */
     public void calculatePriceIncludingTax() {
-        this.priceIncludingTax = this.totalPrice + this.importTax + this.salesTax;
-        setPriceIncludingTax(this.priceIncludingTax);
-        //-- Rounding off applying to this specific item!
-//        return this.priceIncludingTax.setScale(2, RoundingMode.UP);
+        double price_including_tax = getTotalPrice() + getImportTax() + getSalesTax();
+        price_including_tax = new BigDecimal(price_including_tax)
+                .setScale(2,BigDecimal.ROUND_HALF_UP)
+                .doubleValue();
+        setPriceIncludingTax(price_including_tax);
     }
 
     @Override
