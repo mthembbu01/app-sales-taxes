@@ -36,7 +36,6 @@ public class PurchaseReceipt {
     public void calculateTotalPrice() {
         double totalPrice = 0.0;
         for(Item item: items) {
-            System.out.println("Item Total Price: "+item.getPriceIncludingTax());
             totalPrice +=item.getTotalPrice();
         }
         setItemsTotalPrice(totalPrice);
@@ -62,7 +61,7 @@ public class PurchaseReceipt {
                     , item.getProduct().getName()
                     ,item.getPriceIncludingTax()));
         });
-        return "\n* Sales Taxes: " + getItemsSalesTax()
-                +"\n* Items Total: " + getItemsTotalPrice();
+        return "\nSales Taxes: " + getItemsSalesTax()
+                +"\nItems Total: " + getItemsTotalPrice();
     }
 }

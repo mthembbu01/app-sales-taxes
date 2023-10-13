@@ -29,14 +29,14 @@ public class Main {
 		receipt.addItem(bookItem);
 		receipt.addItem(cdItem);
 		receipt.addItem(chocolateItem);
-		//-- calculating the
+		//-- calculating the total price and total tax
 		receipt.init();
-//
+
 		//-- getting the receipt output
 		System.out.println(receipt);
 	}
 
-	public static Product buildProduct(String name,boolean isImport, Type productType, double price){
+	private static Product buildProduct(String name,boolean isImport, Type productType, double price){
 		return Product.builder()
 				.name(name)
 				.isImport(isImport)
