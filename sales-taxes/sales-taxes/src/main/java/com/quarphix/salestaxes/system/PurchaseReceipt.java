@@ -36,7 +36,7 @@ public class PurchaseReceipt {
     public void calculateTotalPrice() {
         double totalPrice = 0.0;
         for(Item item: items) {
-            totalPrice +=item.getTotalPrice();
+            totalPrice +=item.getPriceIncludingTax();
         }
         setItemsTotalPrice(totalPrice);
     }
